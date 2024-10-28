@@ -16,18 +16,21 @@ const server = createServer((req, res) => {
     return;
   }
 
-  res.write(`
-    <style>
-      body {
-        background-color: #1f1f1f;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    </style>
-    <h1>MEMES GEN</h1>`);
+  if (req.url === '/') {
+    res.write(`
+      <style>
+        body {
+          background-color: #1f1f1f;
+          color: white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      </style>
+      <h1>MEMES GEN</h1>`
+    );
     res.end();
+  }
 
   if (req.url === '/api/memes') {
     count+=1;
