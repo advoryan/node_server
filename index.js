@@ -8,15 +8,22 @@ console.log(process.env);
 const server = createServer((req, res) => {
   
   if (req.method === 'OPTIONS') {
-    res.writeHead(200);
+    res.writeHead(200, {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    });
     res.end();
     return;
   }
   
   if (req.url === '/') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.writeHead(200, {
+      'Content-Type': 'text/html',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    });
     res.write(`
       <style>
         body {
@@ -27,22 +34,34 @@ const server = createServer((req, res) => {
           align-items: center;
         }
       </style>
-      <h1>MEMES GEN</h1>`
-    );
+      <h1>MEMES GEN</h1>
+    `);
     res.end();
+    return;
   }
 
   if (req.url === '/api/memes') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    count+=1;
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    });
+    
+    count += 1;
     console.log(count);
     
-    res.writeHead(200, { 'Content-Type': 'application/json' });
     res.write(JSON.stringify({ msg: count }));
     res.end();
+    return;
   }
+
+  res.writeHead(404, {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  });
+  res.write(JSON.stringify({ error: 'Not Found' }));
+  res.end();
 });
 
 const PORT = 5000;
